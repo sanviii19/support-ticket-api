@@ -17,7 +17,8 @@ def resolve(db: Session, ticket_id: str, effort_logged: int) -> dict:
     # No validation that effort_logged or overtime use STANDARD_EFFORT_BLOCKS
     overtime = effort_logged - ticket.complexity
     ticket.quantity -= 1
-    ticket.queue.current_ticket_count -= 1
+    if ticket.queue:      # Bug 5 fix: added check for ticket.queue to avoid AttributeError
+        ticket.queue.current_ticket_count -= 1
     db.commit()
     db.refresh(ticket)
     return {

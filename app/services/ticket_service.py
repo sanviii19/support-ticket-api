@@ -42,6 +42,7 @@ def add_ticket_to_queue(db: Session, queue_id: str, data: TicketCreate) -> Ticke
         raise ValueError("queue_not_found")
     if queue.current_ticket_count + data.quantity > queue.capacity:
         raise ValueError("capacity_exceeded")
+    # Bug 2 - fix: check total tickets does not exceed MAX_TICKETS_PER_QUEUE config value 
     if queue.current_ticket_count + data.quantity > settings.MAX_TICKETS_PER_QUEUE:
         raise ValueError("capacity_exceeded")
     ticket = Ticket(
