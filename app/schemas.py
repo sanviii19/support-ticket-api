@@ -50,7 +50,7 @@ class TicketResponse(BaseModel):
 
 
 class TicketDetailResponse(TicketResponse):
-    queue_id: str
+    queue_id: str | None  # Bug 8 fix: standalone tickets have queue_id = None
 
 
 class TicketComplexityUpdate(BaseModel):
