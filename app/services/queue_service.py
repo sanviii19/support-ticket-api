@@ -31,6 +31,9 @@ def delete_queue(db: Session, queue_id: str) -> None:
     queue = get_queue_by_id(db, queue_id)
     if not queue:
         raise ValueError("queue_not_found")
+    # Bug 9 fix: Cannot delete a queue that still contains tickets
+    if queue.current_ticket_count > 0:
+        raise ValueError("queue_has_tickets")
     db.delete(queue)
     db.commit()
 

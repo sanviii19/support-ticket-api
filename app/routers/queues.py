@@ -66,6 +66,11 @@ def delete_queue(queue_id: str, db: Session = Depends(get_db)):
     except ValueError as e:
         if str(e) == "queue_not_found":
             _queue_404()
+        if str(e) == "queue_has_tickets":
+            raise HTTPException(
+                status_code=400,
+                detail="Cannot delete a queue that still contains tickets",
+            )
         raise
 
 
