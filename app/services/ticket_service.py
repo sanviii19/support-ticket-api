@@ -1,4 +1,3 @@
-import time
 from sqlalchemy.orm import Session
 
 from app.config import settings
@@ -78,7 +77,6 @@ def bulk_add_tickets(db: Session, queue_id: str, entries: list[TicketBulkEntry])
         added += e.quantity  # count total tickets added, not entries
     db.commit()   # Bug 10 fix: commit once after all entries so count is saved atomically
     db.refresh(queue)
-    time.sleep(0.05)  # demo: widens race window vs resolve
     return added
 
 

@@ -1,4 +1,3 @@
-import time
 from sqlalchemy.orm import Session
 
 from app.config import settings
@@ -9,7 +8,6 @@ def resolve(db: Session, ticket_id: str, effort_logged: int) -> dict:
     ticket = db.query(Ticket).filter(Ticket.id == ticket_id).first()
     if not ticket:
         raise ValueError("ticket_not_found")
-    time.sleep(0.05)  # demo: widens race window for concurrent resolve/add
     if ticket.quantity <= 0:
         raise ValueError("out_of_stock")
     if effort_logged < ticket.complexity:
