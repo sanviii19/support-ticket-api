@@ -54,7 +54,7 @@ class TicketDetailResponse(TicketResponse):
 
 
 class TicketComplexityUpdate(BaseModel):
-    complexity: int = Field(..., gt=0)
+    complexity: int = Field(..., ge=0)  # Bug 11 fix: Complexity can be 0
 
 
 # --- Queue full view ---
