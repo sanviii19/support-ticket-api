@@ -75,9 +75,10 @@ def bulk_add_tickets(db: Session, queue_id: str, entries: list[TicketBulkEntry])
         ticket = Ticket(title=e.title, complexity=e.complexity, queue_id=queue_id, quantity=e.quantity)
         db.add(ticket)
         queue.current_ticket_count += e.quantity  # Bug 4 fix: update count per ticket
-        added += 1
-        db.commit()
-        time.sleep(0.05)  # demo: widens race window vs resolve
+        added += e.quantity  # count total tickets added, not entries
+    db.commit()   # Bug 10 fix: commit once after all entries so count is saved atomically
+    db.refresh(queue)
+    time.sleep(0.05)  # demo: widens race window vs resolve
     return added
 
 
